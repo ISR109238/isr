@@ -10,7 +10,7 @@ A complete Information Retrieval pipeline on the Cranfield collection using Elas
 |---|-------|----------|
 | 1 | **TF-IDF** | Term frequency × inverse document frequency |
 | 2 | **Okapi TF** | Length-normalised TF (no IDF) |
-| 3 | **BM25** ⭐ | Probabilistic model with saturation & normalisation |
+| 3 | **BM25**  | Probabilistic model with saturation & normalisation |
 | 4 | **Laplace LM** | Language model with add-1 smoothing |
 | 5 | **Jelinek-Mercer LM** | Language model with linear interpolation |
 
