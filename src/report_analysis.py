@@ -1,22 +1,9 @@
-"""
-report_analysis.py
-------------------
-Generates all statistics, tables, and analysis needed for the IR report.
-Run this AFTER main.py has produced the results files.
-
-Usage:
-    python src/report_analysis.py
-
-Output: prints a full structured report to the terminal AND saves
-        report_data.txt in the project root for reference.
-"""
-
 import os
 import sys
 import math
 from collections import defaultdict
 
-# Make sure src/ imports work
+
 SRC_DIR = os.path.dirname(__file__)
 sys.path.insert(0, SRC_DIR)
 
@@ -34,9 +21,6 @@ MODEL_FULL_NAMES = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Loaders
-# ---------------------------------------------------------------------------
 
 def load_qrels(path: str) -> dict[str, set[str]]:
     qrels = {}
@@ -64,9 +48,6 @@ def load_results(path: str) -> dict[str, list[tuple[str, float]]]:
     return dict(results)
 
 
-# ---------------------------------------------------------------------------
-# Metrics
-# ---------------------------------------------------------------------------
 
 def precision_at_k(ranked: list[str], relevant: set[str], k: int) -> float:
     top_k = ranked[:k]
@@ -107,7 +88,6 @@ def ndcg_at_k(ranked: list[str], relevant: set[str], k: int) -> float:
 
 
 def compute_all_metrics(results: dict, qrels: dict) -> dict:
-    """Returns per-query and aggregate metrics."""
     aps, p10s, p20s, r100s, ndcg10s = [], [], [], [], []
 
     for qid, ranked_list in results.items():
@@ -137,10 +117,6 @@ def compute_all_metrics(results: dict, qrels: dict) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# Per-query top-10 comparison
-# ---------------------------------------------------------------------------
-
 def top10_comparison(all_results: dict, qrels: dict, qid: str) -> str:
     relevant = qrels.get(qid, set())
     lines    = [f"\nTop-10 comparison for Query {qid}  (✓ = relevant)"]
@@ -159,9 +135,7 @@ def top10_comparison(all_results: dict, qrels: dict, qid: str) -> str:
     return "\n".join(lines)
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
+
 
 def main():
     print("Loading data …")
@@ -175,23 +149,17 @@ def main():
             continue
         all_results[model] = load_results(path)
 
-    # ------------------------------------------------------------------
-    # Compute metrics for every model
-    # ------------------------------------------------------------------
+
     metrics = {}
     for model, results in all_results.items():
         metrics[model] = compute_all_metrics(results, qrels)
 
-    # ------------------------------------------------------------------
-    # Sort by MAP
-    # ------------------------------------------------------------------
+
     ranked_models = sorted(metrics.items(), key=lambda x: x[1]["MAP"], reverse=True)
 
     lines = []
 
-    # ==================================================================
-    # SECTION 1 — Collection Statistics
-    # ==================================================================
+
     total_relevant = sum(len(v) for v in qrels.values())
     lines += [
         "=" * 70,
@@ -207,9 +175,7 @@ def main():
         "",
     ]
 
-    # ==================================================================
-    # SECTION 2 — Overall Metrics Table
-    # ==================================================================
+
     lines += [
         "=" * 70,
         "SECTION 2 — MODEL COMPARISON TABLE",
@@ -228,9 +194,7 @@ def main():
         )
     lines += ["", f"  ⭐ Best model by MAP: {MODEL_FULL_NAMES[ranked_models[0][0]]}  (MAP={ranked_models[0][1]['MAP']:.4f})", ""]
 
-    # ==================================================================
-    # SECTION 3 — Per-Query AP for selected queries
-    # ==================================================================
+
     lines += [
         "=" * 70,
         "SECTION 3 — PER-QUERY AVERAGE PRECISION (sample: queries 1-10)",
@@ -247,9 +211,7 @@ def main():
         lines.append(row)
     lines.append("")
 
-    # ==================================================================
-    # SECTION 4 — Top-10 per-model for 3 representative queries
-    # ==================================================================
+
     lines += [
         "=" * 70,
         "SECTION 4 — TOP-10 RANKED DOCUMENTS FOR REPRESENTATIVE QUERIES",
@@ -261,9 +223,7 @@ def main():
         lines.append(top10_comparison(all_results, qrels, qid))
         lines.append("")
 
-    # ==================================================================
-    # SECTION 5 — Model descriptions (for report writing)
-    # ==================================================================
+
     lines += [
         "=" * 70,
         "SECTION 5 — MODEL DESCRIPTIONS & FORMULAS",
@@ -306,9 +266,7 @@ def main():
         "",
     ]
 
-    # ==================================================================
-    # SECTION 6 — Analysis text (copy into report)
-    # ==================================================================
+
     best  = ranked_models[0][0]
     worst = ranked_models[-1][0]
     lines += [

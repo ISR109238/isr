@@ -10,9 +10,7 @@ MODEL_NAMES = ["tfidf", "okapi_tf", "bm25", "laplace", "jm"]
 METRICS_OF_INTEREST = ["map", "P_10", "recall_1000", "ndcg"]
 
 
-# ---------------------------------------------------------------------------
-# Step 10 — Run trec_eval
-# ---------------------------------------------------------------------------
+
 
 def run_trec_eval(qrels_path: str, results_path: str) -> dict[str, float]:
     """
@@ -63,9 +61,7 @@ def evaluate_all(qrels_path: str) -> dict[str, dict[str, float]]:
     return metrics
 
 
-# ---------------------------------------------------------------------------
-# Step 11 — Comparison & Analysis
-# ---------------------------------------------------------------------------
+
 
 def compare_models(metrics: dict[str, dict[str, float]]) -> None:
     """

@@ -1,9 +1,3 @@
-"""
-elasticsearch_setup.py
-----------------------
-Steps 2 & 3 — Create the Elasticsearch index and bulk-index all documents.
-"""
-
 from elasticsearch import Elasticsearch, helpers
 
 ES_HOST     = "https://localhost:9200"

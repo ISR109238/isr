@@ -1,12 +1,3 @@
-"""
-helpers.py
-----------
-Step 6 — Elasticsearch statistics helper layer.
-
-All 1400 term vectors are fetched in ONE bulk request at startup,
-then everything runs from in-memory dicts — no per-query ES calls.
-"""
-
 from __future__ import annotations
 from elasticsearch import Elasticsearch
 from elasticsearch_setup import INDEX

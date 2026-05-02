@@ -1,22 +1,4 @@
 """
-main.py
--------
-Master orchestrator — runs all 11 steps in order.
-
-Usage
------
-1. Start Elasticsearch:
-       docker compose up -d
-
-2. Install dependencies:
-       pip install -r requirements.txt
-
-3. Run the full pipeline:
-       python main.py
-
-4. (Optional) Force re-index if you change the data:
-       python main.py --reindex
-
 Flags
 -----
 --reindex   : Delete and recreate the ES index before indexing
@@ -29,7 +11,7 @@ import argparse
 import os
 import sys
 
-# Make src/ importable regardless of working directory
+
 SRC_DIR = os.path.join(os.path.dirname(__file__), "src")
 sys.path.insert(0, SRC_DIR)
 
@@ -40,19 +22,12 @@ from ranker             import run_all_models
 from evaluator          import evaluate_all, compare_models, compare_top10
 
 
-# ---------------------------------------------------------------------------
-# Paths — adjust if your files live elsewhere
-# ---------------------------------------------------------------------------
-
 DATA_DIR      = os.path.join(os.path.dirname(__file__), "data")
 DOCS_XML      = os.path.join(DATA_DIR, "cranfield_docs.xml")
 QUERIES_XML   = os.path.join(DATA_DIR, "queries.xml")
 QRELS_TXT     = os.path.join(DATA_DIR, "qrels.txt")
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(description="Cranfield IR pipeline")
@@ -126,7 +101,6 @@ def main():
     print("\n[STEP 11] Comparing models …")
     compare_models(metrics)
 
-    # Optional per-query comparison
     if args.query:
         compare_top10(all_results, qrels, args.query)
 

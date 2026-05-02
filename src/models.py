@@ -1,24 +1,3 @@
-"""
-models.py
----------
-Step 7 — Manual implementations of five IR ranking models.
-
-Each scoring function takes:
-    query_terms : list[str]   — already tokenised & cleaned query
-    doc_id      : str         — ES document ID (== docno)
-    helper      : ESHelper    — statistics engine from helpers.py
-
-And returns a single float score (higher = more relevant).
-
-Models implemented
-------------------
-1. TF-IDF         — classic weighted term frequency
-2. Okapi TF       — normalised TF (no IDF component)
-3. BM25           — Robertson/Spärck Jones probabilistic model  ⭐
-4. Laplace LM     — language model with additive (+1) smoothing
-5. Jelinek-Mercer — language model with linear interpolation smoothing
-"""
-
 import math
 from helpers import ESHelper
 

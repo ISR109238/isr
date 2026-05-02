@@ -1,12 +1,3 @@
-"""
-ranker.py
----------
-Steps 8 & 9 — Score all documents for each query and write ranked results.
-
-All scoring is done in pure Python from in-memory caches — no ES calls
-during ranking. helper.warm() loads everything upfront in one bulk request.
-"""
-
 import os
 from tqdm import tqdm
 
